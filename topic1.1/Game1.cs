@@ -164,9 +164,8 @@ namespace topic1._1
 			// TODO: Add your update logic here
 			if (asteroidRect.Intersects(rocketRect) || asteroidRect.Intersects(rocketRect2) || asteroidRect.Intersects(rocketRect3))
 			{
-				// Handle collision with rocket
-				// For example, you can reset the asteroid's position or reduce health
-				asteroidRect.X = 100; // Reset position
+				
+				asteroidRect.X = 100; 
 				asteroidRect.Y = 100;
 				Exit();
 				
@@ -174,7 +173,7 @@ namespace topic1._1
 
 			if (time > 1f)
 			{
-				rocketRect.X += 3; // Move rocket to the right
+				rocketRect.X += 3; 
 				
 			    
 			    
@@ -182,11 +181,11 @@ namespace topic1._1
 
 			if (time > 2f)
 			{
-				rocketRect2.X -= 3; // Move rocket to the left
+				rocketRect2.X -= 3; 
 			}
 			if (time > 3f)
 			{
-				rocketRect3.Y += 3; // Move rocket to the up
+				rocketRect3.Y += 3; 
 			}
 
 			if (rocketRect.X > window.Width)
