@@ -7,12 +7,7 @@ using Microsoft.Xna.Framework.Input;
 namespace topic1._1
 {
 
-    enum ScreenState
-	{
-		MainMenu,
-		Gameplay,
-		GameOver
-	}
+   
 
 	public class Game1 : Game
 	{
@@ -20,7 +15,7 @@ namespace topic1._1
 		private SpriteBatch _spriteBatch;
 		Rectangle window;
 
-		Texture2D background;
+		Texture2D background, background2;
 
 		Texture2D asteroidTexture;
 
@@ -45,7 +40,20 @@ namespace topic1._1
 		int randomX;
 
 		int randomY;
-		public Game1()
+
+		Color randomColor;
+
+		int randomAlpha;
+
+		float brightness;
+
+		SpriteFont font;
+
+		float time;
+
+
+
+        public Game1()
 		{
 			_graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
@@ -63,6 +71,8 @@ namespace topic1._1
 			_graphics.PreferredBackBufferHeight = 500;
 			_graphics.ApplyChanges();
 			random = new Random();
+			brightness = 1f;
+			randomColor = new Color();
 			for (int i = 0; i < 3; i++)
 			{
 				randomX = random.Next(0, window.Width - 50);
@@ -75,8 +85,8 @@ namespace topic1._1
 			rocketRect2 = new Rectangle(850, randomX, 50, 50);
 			rocketRect3 = new Rectangle(randomY, -50, 50, 50);
 
-
-			base.Initialize();
+            randomAlpha = random.Next(0, 10);
+            base.Initialize();
 
 			
 		}
@@ -91,6 +101,10 @@ namespace topic1._1
 			asteroidTexture = Content.Load<Texture2D>("image/asteroid");
 
 			rocketTexture = Content.Load<Texture2D>("image/rocket");
+
+			background2 = Content.Load<Texture2D>("image/space_background");
+
+            font = Content.Load<SpriteFont>("text/maintext");
 		}
 
 		protected override void Update(GameTime gameTime)
@@ -98,11 +112,12 @@ namespace topic1._1
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
 			float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			float time = (float)gameTime.TotalGameTime.TotalSeconds;
+			time = (float)gameTime.TotalGameTime.TotalSeconds;
 			rotationAngle += rotationSpeed * elapsed;
 			KeyboardState currentKey = Keyboard.GetState();
+            
 
-			if (currentKey.IsKeyDown(Keys.Right))
+            if (currentKey.IsKeyDown(Keys.Right))
 			{
 				asteroidRect.X += 2;
 			}
@@ -153,50 +168,101 @@ namespace topic1._1
 				// For example, you can reset the asteroid's position or reduce health
 				asteroidRect.X = 100; // Reset position
 				asteroidRect.Y = 100;
+				Exit();
 				
 			}
-			
+
 			if (time > 1f)
 			{
-				rocketRect.X += 1; // Move rocket to the right
-			}
+				rocketRect.X += 3; // Move rocket to the right
+				
+			    
+			    
+            }
 
 			if (time > 2f)
 			{
-				rocketRect2.X -= 1; // Move rocket to the left
+				rocketRect2.X -= 3; // Move rocket to the left
 			}
 			if (time > 3f)
 			{
-				rocketRect3.Y += 1; // Move rocket to the up
+				rocketRect3.Y += 3; // Move rocket to the up
 			}
 
 			if (rocketRect.X > window.Width)
 			{
-				rocketRect = new Rectangle(-80, random.Next(0, window.Height - 50), 50, 50);
+				rocketRect = new Rectangle(-80, random.Next(50, window.Height - 50), 50, 50);
 
 			}
 			else if (rocketRect2.X + rocketRect2.Width < 0)
 			{
-				rocketRect2 = new Rectangle(-80, random.Next(0, window.Height - 50), 50, 50);
+				rocketRect2 = new Rectangle(800, random.Next(50, window.Height - 50), 50, 50);
 
 			}
 			else if (rocketRect3.Y > window.Height)
 			{
-				rocketRect3.Y = -rocketRect3.Height; // Reset position to the top
+                
+                rocketRect3 = new Rectangle(random.Next(50, window.Width - 50), 0,60,60);
 				
 			}
 
-			
+			if (randomAlpha == 0)
+			{
+				randomColor = Color.White;
+			}
+			else if (randomAlpha == 1)
+			{
+				randomColor = Color.Yellow;
+			}
+            else if (randomAlpha == 2)
+            {
+				randomColor = Color.SteelBlue;
+            }
+            else if (randomAlpha == 3)
+            {
+                randomColor = Color.Orange;
+            }
+			else if (randomAlpha == 4)
+			{
+				randomColor = Color.GhostWhite;
+				brightness = 0.5f;
+			}
+            else if (randomAlpha == 5)
+            {
+				randomColor = Color.LightGreen;
+                brightness = 0.3f;
+            }
+            else if (randomAlpha == 6)
+            {
+				randomColor = Color.Lime;
+            }
+			else if (randomAlpha == 7)
+			{
+				randomColor = Color.Gold;
+			}
+			else
+			{
+				randomColor = Color.White;
+			}
 
 
-			base.Update(gameTime);
+
+            base.Update(gameTime);
 		}
 
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 			_spriteBatch.Begin();
-			_spriteBatch.Draw(background, window, Color.White);
+			if (randomAlpha >= 4)
+			{
+                _spriteBatch.Draw(background, window, Color.White);
+            }
+            else
+            {
+                _spriteBatch.Draw(background2, window, Color.White);
+            }
+           
 			_spriteBatch.Draw(
 				asteroidTexture,	
 				new Vector2(asteroidRect.X + asteroidRect.Width / 2f, asteroidRect.Y + asteroidRect.Height / 2f),
@@ -208,9 +274,15 @@ namespace topic1._1
 				SpriteEffects.None,
 				0f);
 
-			_spriteBatch.Draw(rocketTexture, rocketRect,null, Color.White, 1.5f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
-			_spriteBatch.Draw(rocketTexture, rocketRect2, null, Color.White, -1.5f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
-			_spriteBatch.Draw(rocketTexture, rocketRect3, null, Color.White, 3.2f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
+			_spriteBatch.Draw(rocketTexture, rocketRect,null, randomColor * brightness, 1.5f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
+			_spriteBatch.Draw(rocketTexture, rocketRect2, null, randomColor * brightness, -1.5f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
+			_spriteBatch.Draw(rocketTexture, rocketRect3, null, randomColor * brightness, 3.2f, new Vector2(rocketTexture.Width / 2f, rocketTexture.Height / 2f), SpriteEffects.None,1f);
+			_spriteBatch.DrawString(font, "_PROGRAM.DRIVEABLE_ASTEROID_ (Don't get hit!)", new Vector2(0, 0), randomColor);
+			if (time <= 2)
+			{
+				_spriteBatch.DrawString(font, "Use arrow keys to move!", new Vector2(600,470), randomColor);
+			}
+			
 			_spriteBatch.End();
 			// TODO: Add your drawing code here
 

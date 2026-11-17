@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:image/rocket.png
 
+#begin image/space_background.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:image/space_background.jpg
+
 #begin image/spaceBack.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -48,4 +60,14 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:image/spaceBack.png
+
+#begin Jersey15-Regular.ttf
+/copy:Jersey15-Regular.ttf
+
+#begin text/maintext.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:text/maintext.spritefont
 
